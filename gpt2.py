@@ -50,6 +50,7 @@ def on_send():
 #generates chatbots response ny calling generate response function
     sentiment = sentiment_analysis(user_input)
     max_length = max(2, len(user_input.split()) // 2)
+    max_length = max(max_length, 25)
     summary = summarizer(user_input, max_length = max_length, min_length = 25)
 #uses 'Hugging Face' pipelines(open-source library for building and training natural langauge #proscessing)
     chatbox.config(state=tk.NORMAL)

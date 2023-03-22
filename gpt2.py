@@ -66,7 +66,7 @@ root.title("Evbot")
 #title of root window
 user_input_var = tk.StringVar()
 #creates object used to store and retrieve the users input from widget
-chatbox = tk.Text(root, wrap=tk.WORD, state=tk.DASABLED)
+chatbox = tk.Text(root, wrap=tk.WORD, state=tk.DISABLED)
 chatbox.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 #creates text widget 'chatbox' wraps the word,pack is called to add widget to root window with #10pixel padding
 input_frame = tk.Frame(root)

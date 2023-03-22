@@ -1,4 +1,5 @@
 import torch
+import tkinter
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 #lodaing GPT-2 and tokenizer 

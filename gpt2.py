@@ -60,7 +60,7 @@ def on_send():
     user_input_var.set("")
 #clears entry widget 
 
-root = tk.TK()
+root = tk.Tk()
 #creates main tinker window called the root window
 root.title("Evbot")
 #title of root window

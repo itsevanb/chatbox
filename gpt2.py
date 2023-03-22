@@ -49,12 +49,14 @@ def on_send():
     chatbot_response = generate_response(user_input)[0]
 #generates chatbots response ny calling generate response function
     sentiment = sentiment_analysis(user_input)
-    summary = summarizer(user_input, max_length = 50, min_length = 25)
+    max_length = max(2, len(user_input.split()) // 2)
+    summary = summarizer(user_input, max_length = max_length, min_length = 25)
 #uses 'Hugging Face' pipelines(open-source library for building and training natural langauge #proscessing)
-    chatbox.insert(tk.end, f"User: {user_input}\n")
-    chatbox.insert(tk.end, f"Evbot: {chatbot_response}\n")
-    chatbox.insert(tk.end, f"{sentiment[0]['label']} ({sentiment[0]['score']:.2f})\n")
-    chatbox.insert(tk.end, f"Summary: {summary[0]}['summary_text']\n\n")
+    chatbox.config(state=tk.NORMAL)
+    chatbox.insert(tk.END, f"User: {user_input}\n")
+    chatbox.insert(tk.END, f"Evbot: {chatbot_response}\n")
+    chatbox.insert(tk.END, f"{sentiment[0]['label']} ({sentiment[0]['score']:.2f})\n")
+    chatbox.insert(tk.END, f"Summary: {summary[0]}['summary_text']\n\n")
 #lines insert user input, chatbot response, sentiment analysis, and summarization results into text
 #widget 'tk.end' tells 'insert()' to append the text at end of widget
     user_input_var.set("")
@@ -70,12 +72,12 @@ chatbox = tk.Text(root, wrap=tk.WORD, state=tk.DISABLED)
 chatbox.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 #creates text widget 'chatbox' wraps the word,pack is called to add widget to root window with #10pixel padding
 input_frame = tk.Frame(root)
-input_frame.pack(padx=10, paddy=(0, 10), fill = tk.X)
+input_frame.pack(padx=10, pady=(0, 10), fill = tk.X)
 #creates a frame widget, containing the entry widget and 'send' button, pack is called to add frame #to root window with padding on the left, right, and buttom sides
 user_input_entry = tk.Entry(input_frame, textvariable=user_input_var)
-user_input_entry.pack(side=tk.LEFT, fill=tk.x, expand=True)
+user_input_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
 #creates a entry widget to get users input, pack is called to add widget to root window
-send_button = tk.Button(input_frame, texts="Send", command=on_send)
+send_button = tk.Button(input_frame, text="Send", command=on_send)
 send_button.pack(side=tk.RIGHT)
 
 root.mainloop()

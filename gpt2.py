@@ -1,11 +1,14 @@
 import torch
-import tkinter
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import tkinter as tk
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, pipeline
 
 #lodaing GPT-2 and tokenizer 
 model_name = 'gpt2'
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 model = GPT2LMHeadModel.from_pretrained(model_name)
+
+sentiment_analysis = pipeline("sentiment-analysis")
+summarizer = pipeline("summarization")
 
 #create a function to generate respones
 def generate_response(input_text, max_length=100, num_return_sequences=1): 
@@ -39,7 +42,44 @@ def generate_response(input_text, max_length=100, num_return_sequences=1):
 #decodes generated token sequences back into readible text iterating through out_putsequences
     return decoded_output
 
-#command-line interface for chatbot
+#GUI for chatbot
+def on_send():
+    user_input = user_input_var.get()
+#gets users input from entry widget using get() method 
+    chatbot_response = generate_response(user_input)[0]
+#generates chatbots response ny calling generate response function
+    sentiment = sentiment_analysis(user_input)
+    summary = summarizer(user_input, max_length = 50, min_length = 25)
+#uses 'Hugging Face' pipelines(open-source library for building and training natural langauge #proscessing)
+    chatbox.insert(tk.end, f"User: {user_input}\n")
+    chatbox.insert(tk.end, f"Evbot: {chatbot_response}\n")
+    chatbox.insert(tk.end, f"{sentiment[0]['label']} ({sentiment[0]['score']:.2f})\n")
+    chatbox.insert(tk.end, f"Summary: {summary[0]}['summary_text']\n\n")
+#lines insert user input, chatbot response, sentiment analysis, and summarization results into text
+#widget 'tk.end' tells 'insert()' to append the text at end of widget
+    user_input_var.set("")
+#clears entry widget 
+
+root = tk.TK()
+#creates main tinker window called the root window
+root.title("Evbot")
+#title of root window
+user_input_var = tk.StringVar()
+#creates object used to store and retrieve the users input from widget
+chatbox = tk.Text(root, wrap=tk.WORD, state=tk.DASABLED)
+chatbox.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+#creates text widget 'chatbox' wraps the word,pack is called to add widget to root window with #10pixel padding
+input_frame = tk.Frame(root)
+input_frame.pack(padx=10, paddy=(0, 10), fill = tk.X)
+#creates a frame widget, containing the entry widget and 'send' button, pack is called to add frame #to root window with padding on the left, right, and buttom sides
+user_input_entry = tk.Entry(input_frame, textvariable=user_input_var)
+user_input_entry.pack(side=tk.LEFT, fill=tk.x, expand=True)
+#creates a entry widget to get users input, pack is called to add widget to root window
+send_button = tk.Button(input_frame, texts="Send", command=on_send)
+send_button.pack(side=tk.RIGHT)
+
+root.mainloop()
+
 
 if __name__ == '__main__':
     print(f'\033[92m''Welcome to ChatBox :)\nTo exit please enter "quit" ''\033[0m')

@@ -34,11 +34,11 @@ def generate_response(input_text, max_length=100, num_return_sequences=1):
 #command-line interface for chatbot
 
 if __name__ == '__main__':
-    print(f'\033[92m''Welcome to ChatBox :)\nto exit please enter "quit" ''\033[0m')
+    print(f'\033[92m''Welcome to ChatBox :)\nTo exit please enter "quit" ''\033[0m')
 
     while True: 
 #creates an infinite loop unless user input 'quit'
-        user_input = input('\033[93m'"User: '\033[0m']") 
+        user_input = input('\033[91m'"User: '\033[0m'") 
         if user_input.lower() == 'quit':
             break
         chatbot_response = generate_response(user_input)[0]

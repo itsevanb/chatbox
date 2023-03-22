@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     while True: 
 #creates an infinite loop unless user input 'quit'
-        user_input = input('\033[91m'"User: '\033[0m'") 
+        user_input = input('\033[91m'"User:") 
         if user_input.lower() == 'quit':
             break
         chatbot_response = generate_response(user_input)[0]

@@ -10,7 +10,12 @@ model = GPT2LMHeadModel.from_pretrained(model_name)
 def generate_response(input_text, max_length=100, num_return_sequences=1): 
 #max_length - 100 tokens for generated response, r_n_s - model should only generate one sequence 
     input_ids = tokenizer.encode(input_text, return_tensors='pt')
-#tokenizes input_text, output should be a pytorch tensor, a pyt-tensor is a data structure similar #to an array or vector -- a container for numerical data that you can perform mathematical #operations on, utilizes GPU instead of CPU 
+#tokenizes input_text, output should be a pytorch tensor, a pyt-tensor is a data structure similar #to an array or vector -- a container for numerical data that you can perform mathematical #operations on, utilizes GPU instead of CPU
+    attention_mask = torch.ones(input_ids.shape, dtype=torch.long)
+#creates another pytorch sensor that is same shape as other tensor called 'input_ids'/ 'input_ids' #is a sequence of tokens(words) but represented as integers(whole numbers) and each integer #correspnds to said token/atenntion_mask will be used to mask out tokens that are not relevant
+#(wont speak gibberish)
+    pad_token_id = tokenizer.eos_token_id
+#EOS token is specific token that is used to indicate the current sentence or sequence has ended and #to generate a new one/prevents chatbot from treating padding tokoens as part of the input sequence/#EOS token used to indicate end of sentence or sequence, sets pad_token_id = EOS token
     output_sequence = model.generate( 
 #calls generate method on GPT-2 model and takes number of paramerters
         input_ids = input_ids,
@@ -26,6 +31,8 @@ def generate_response(input_text, max_length=100, num_return_sequences=1):
 #reduces probablity of generating low probability tokens
         top_p = 0.95,
 #uses nucleus sampling(more creative and natural sounding output)(picks next token based on #probability threshold rather than always picking most likely token)threshold or nucleus is the #probability value that determines how many possible next words to consider, rather than looking at #most probably tokens(top_k sampling\\top_p is subset of top_k)
+        attention_mask = attention_mask,
+        pad_token_id = pad_token_id,
     )
     decoded_output = [tokenizer.decode(sequence) for sequence in output_sequence]
 #decodes generated token sequences back into readible text iterating through out_putsequences

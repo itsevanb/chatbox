@@ -1,12 +1,12 @@
 import torch
 import tkinter as tk
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, pipeline
+import openai 
 
 #lodaing GPT-2 and tokenizer 
-model_name = 'gpt2'
+model_name = 'ChatGPT4 Evbot'
 tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 model = GPT2LMHeadModel.from_pretrained(model_name)
-
 sentiment_analysis = pipeline("sentiment-analysis")
 summarizer = pipeline("summarization")
 
